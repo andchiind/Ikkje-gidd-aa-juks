@@ -10,6 +10,10 @@ import interfaces.ILoyaltyCardOwner;
  */
 public class LoyaltyCard implements ILoyaltyCard {
 
+    private int numberOfUses;
+    private int numberOfPoints;
+    private ILoyaltyCardOwner owner;
+
     @Override
     public ILoyaltyCardOwner getOwner() {
         // TODO Auto-generated method stub
@@ -19,18 +23,19 @@ public class LoyaltyCard implements ILoyaltyCard {
     @Override
     public int getNumberOfUses() {
         // TODO Auto-generated method stub
-        return 0;
+        return numberOfUses;
     }
 
     @Override
     public int getNumberOfPoints() {
         // TODO Auto-generated method stub
-        return 0;
+        return numberOfPoints;
     }
 
     @Override
     public void addPoints(int points) {
         // TODO Auto-generated method stub
+        numberOfPoints += points;
     }
 
     @Override
