@@ -10,12 +10,9 @@ import interfaces.ILoyaltyCardOwner;
  */
 public class LoyaltyCard implements ILoyaltyCard {
 
-    private interfaces.ILoyaltyCardOwner owner;
-
     @Override
     public ILoyaltyCardOwner getOwner() {
         // TODO Auto-generated method stub
-        return owner;
         return null;
     }
 
