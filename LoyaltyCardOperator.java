@@ -8,20 +8,38 @@ import interfaces.ILoyaltyCard;
 import interfaces.ILoyaltyCardOperator;
 import interfaces.ILoyaltyCardOwner;
 
+import java.util.ArrayList;
+
 /**
  * This class represents a simple loyalty card operator.
  *
  */
 public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyaltyCardOperator {
 
+    private ArrayList<String> registeredOwners = new ArrayList<>();
+    private ArrayList<ILoyaltyCard> cards = new ArrayList<>();
+
     @Override
     public void registerOwner(ILoyaltyCardOwner loyaltyCardOwner) throws OwnerAlreadyRegisteredException {
         // TODO Auto-generated method stub
+        if (registeredOwners.contains(loyaltyCardOwner.getEmail())) {
+            throw new OwnerAlreadyRegisteredException();
+        } else {
+            registeredOwners.add(loyaltyCardOwner.getEmail());
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            cards.add(Factory.getInstance().makeLoyaltyCard(loyaltyCardOwner));
+        }
     }
 
     @Override
     public void unregisterOwner(ILoyaltyCardOwner loyaltyCardOwner) throws OwnerNotRegisteredException {
         // TODO Auto-generated method stub
+        if (!registeredOwners.contains(loyaltyCardOwner.getEmail())) {
+            throw new OwnerNotRegisteredException();
+        } else {
+            registeredOwners.remove(loyaltyCardOwner.getEmail());
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+        }
     }
 
     @Override
@@ -38,31 +56,56 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
     @Override
     public int getNumberOfCustomers() {
         // TODO Auto-generated method stub
-        return 0;
+        return registeredOwners.size();
     }
 
     @Override
     public int getTotalNumberOfPoints() {
         // TODO Auto-generated method stub
-        return 0;
+        int points = 0;
+        for (ILoyaltyCard card: cards) {
+            points += card.getNumberOfPoints();
+        }
+        return points;
     }
 
     @Override
     public int getNumberOfPoints(String ownerEmail) throws OwnerNotRegisteredException {
         // TODO Auto-generated method stub
-        return 0;
+        for (ILoyaltyCard card: cards) {
+            if (card.getOwner().getEmail().equals(ownerEmail)) {
+                return card.getNumberOfPoints();
+            }
+        }
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        throw new OwnerNotRegisteredException();
     }
 
     @Override
     public int getNumberOfUses(String ownerEmail) throws OwnerNotRegisteredException {
         // TODO Auto-generated method stub
-        return 0;
+        for (ILoyaltyCard card: cards) {
+            if (card.getOwner().getEmail().equals(ownerEmail)) {
+                return card.getNumberOfUses();
+            }
+        }
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        throw new OwnerNotRegisteredException();
     }
 
     @Override
     public ILoyaltyCardOwner getMostUsed() throws OwnerNotRegisteredException {
         // TODO Auto-generated method stub
-        return null;
+        int max = 0;
+        ILoyaltyCardOwner mostUsed = null;
+        for (ILoyaltyCard card: cards) {
+            if (card.getNumberOfUses() > max) {
+                max = card.getNumberOfUses();
+                mostUsed = card.getOwner();
+            }
+        }
+        //!!!!!!!!!!!!!!!!!!!!!!!!
+        return mostUsed;
     }
 
 }

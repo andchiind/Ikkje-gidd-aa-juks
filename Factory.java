@@ -31,19 +31,16 @@ public final class Factory implements IFactory {
 
     @Override
     public ILoyaltyCardOwner makeLoyaltyCardOwner(String email, String name) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LoyaltyCardOwner(email, name);
     }
 
     @Override
     public ILoyaltyCard makeLoyaltyCard(ILoyaltyCardOwner loyaltyCardOwner) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LoyaltyCard(loyaltyCardOwner);
     }
 
     @Override
     public ILoyaltyCardOperator makeLoyaltyCardOperator() {
-        // TODO Auto-generated method stub
-        return null;
+        return new LoyaltyCardOperator();
     }
 }

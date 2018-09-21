@@ -8,16 +8,22 @@ import interfaces.ILoyaltyCardOwner;
  */
 public class LoyaltyCardOwner implements ILoyaltyCardOwner {
 
+    private String email;
+    private String name;
+
+    public LoyaltyCardOwner (String email, String name) {
+        this.email = email;
+        this.name = name;
+    }
+
     @Override
     public String getEmail() {
-        // TODO Auto-generated method stub
-        return null;
+        return email;
     }
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        return null;
+        return name;
     }
 
 }

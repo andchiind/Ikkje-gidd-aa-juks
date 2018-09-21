@@ -14,33 +14,39 @@ public class LoyaltyCard implements ILoyaltyCard {
     private int numberOfPoints;
     private ILoyaltyCardOwner owner;
 
+    public LoyaltyCard(ILoyaltyCardOwner owner) {
+        this.owner = owner;
+    }
+
     @Override
     public ILoyaltyCardOwner getOwner() {
-        // TODO Auto-generated method stub
-        return null;
+        return owner;
     }
 
     @Override
     public int getNumberOfUses() {
-        // TODO Auto-generated method stub
         return numberOfUses;
     }
 
     @Override
     public int getNumberOfPoints() {
-        // TODO Auto-generated method stub
         return numberOfPoints;
     }
 
     @Override
     public void addPoints(int points) {
-        // TODO Auto-generated method stub
+        numberOfUses++;
         numberOfPoints += points;
     }
 
     @Override
     public void usePoints(int points) throws InsufficientPointsException {
-        // TODO Auto-generated method stub
+        if (points < 100) {
+            throw new InsufficientPointsException();
+        } else {
+            numberOfUses++;
+            numberOfPoints -= 100;
+        }
     }
 
 }
