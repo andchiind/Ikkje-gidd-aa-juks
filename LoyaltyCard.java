@@ -35,8 +35,11 @@ public class LoyaltyCard implements ILoyaltyCard {
 
     @Override
     public void addPoints(int points) {
-        numberOfUses++;
-        numberOfPoints += points;
+        if (points > 0) {
+            numberOfUses++;
+            numberOfPoints += points;
+        }
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     @Override

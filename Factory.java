@@ -14,10 +14,6 @@ public final class Factory implements IFactory {
 
     private static IFactory factoryInstance = null;
 
-    private Factory() {
-
-    }
-
     /**
      * Method which returns an instance of the singleton Factory class.
      * @return the instance of the Factory

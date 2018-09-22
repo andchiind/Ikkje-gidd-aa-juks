@@ -38,19 +38,40 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
             throw new OwnerNotRegisteredException();
         } else {
             registeredOwners.remove(loyaltyCardOwner.getEmail());
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
     }
 
     @Override
     public void processMoneyPurchase(String ownerEmail, int pence) throws OwnerNotRegisteredException {
         // TODO Auto-generated method stub
+        for (ILoyaltyCard card: cards) {
+            if (card.getOwner().getEmail().equals(ownerEmail)) {
+                card.addPoints(pence/100); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //not sure if this rounds correctly, and do we only count /100 in each purchase?
+                return;
+            }
+        }
+        throw new OwnerNotRegisteredException();
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     @Override
     public void processPointsPurchase(String ownerEmail, int pence)
             throws InsufficientPointsException, OwnerNotRegisteredException {
         // TODO Auto-generated method stub
+        for (ILoyaltyCard card: cards) {
+            if (card.getOwner().getEmail().equals(ownerEmail)) {
+
+                if (card.getNumberOfPoints() < pence) {
+                    throw new InsufficientPointsException();
+                } else {
+                    card.usePoints(pence);
+                }
+
+            }
+        }
+        throw new OwnerNotRegisteredException();
     }
 
     @Override
@@ -104,7 +125,7 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
                 mostUsed = card.getOwner();
             }
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return mostUsed;
     }
 
