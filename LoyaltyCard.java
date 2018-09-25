@@ -39,7 +39,6 @@ public class LoyaltyCard implements ILoyaltyCard {
             numberOfUses++;
             numberOfPoints += points;
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     @Override

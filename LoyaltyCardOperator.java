@@ -21,68 +21,66 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
 
     @Override
     public void registerOwner(ILoyaltyCardOwner loyaltyCardOwner) throws OwnerAlreadyRegisteredException {
-        // TODO Auto-generated method stub
+
         if (registeredOwners.contains(loyaltyCardOwner.getEmail())) {
             throw new OwnerAlreadyRegisteredException();
         } else {
             registeredOwners.add(loyaltyCardOwner.getEmail());
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             cards.add(Factory.getInstance().makeLoyaltyCard(loyaltyCardOwner));
         }
     }
 
     @Override
     public void unregisterOwner(ILoyaltyCardOwner loyaltyCardOwner) throws OwnerNotRegisteredException {
-        // TODO Auto-generated method stub
+
         if (!registeredOwners.contains(loyaltyCardOwner.getEmail())) {
             throw new OwnerNotRegisteredException();
         } else {
             registeredOwners.remove(loyaltyCardOwner.getEmail());
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
     }
 
     @Override
     public void processMoneyPurchase(String ownerEmail, int pence) throws OwnerNotRegisteredException {
-        // TODO Auto-generated method stub
+
         for (ILoyaltyCard card: cards) {
             if (card.getOwner().getEmail().equals(ownerEmail)) {
-                card.addPoints(pence/100); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //not sure if this rounds correctly, and do we only count /100 in each purchase?
+                card.addPoints(pence/100);
                 return;
             }
         }
         throw new OwnerNotRegisteredException();
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     @Override
     public void processPointsPurchase(String ownerEmail, int pence)
             throws InsufficientPointsException, OwnerNotRegisteredException {
-        // TODO Auto-generated method stub
-        for (ILoyaltyCard card: cards) {
-            if (card.getOwner().getEmail().equals(ownerEmail)) {
 
-                if (card.getNumberOfPoints() < pence) {
-                    throw new InsufficientPointsException();
-                } else {
-                    card.usePoints(pence);
+        if (pence > 0) {
+            for (ILoyaltyCard card : cards) {
+                if (card.getOwner().getEmail().equals(ownerEmail)) {
+
+                    if (card.getNumberOfPoints() < pence) {
+                        throw new InsufficientPointsException();
+                    } else {
+                        card.usePoints(pence);
+                    }
+
                 }
-
             }
+            throw new OwnerNotRegisteredException();
         }
-        throw new OwnerNotRegisteredException();
     }
 
     @Override
     public int getNumberOfCustomers() {
-        // TODO Auto-generated method stub
+
         return registeredOwners.size();
     }
 
     @Override
     public int getTotalNumberOfPoints() {
-        // TODO Auto-generated method stub
+
         int points = 0;
         for (ILoyaltyCard card: cards) {
             points += card.getNumberOfPoints();
@@ -92,40 +90,43 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
 
     @Override
     public int getNumberOfPoints(String ownerEmail) throws OwnerNotRegisteredException {
-        // TODO Auto-generated method stub
+
         for (ILoyaltyCard card: cards) {
             if (card.getOwner().getEmail().equals(ownerEmail)) {
                 return card.getNumberOfPoints();
             }
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         throw new OwnerNotRegisteredException();
     }
 
     @Override
     public int getNumberOfUses(String ownerEmail) throws OwnerNotRegisteredException {
-        // TODO Auto-generated method stub
+
         for (ILoyaltyCard card: cards) {
             if (card.getOwner().getEmail().equals(ownerEmail)) {
                 return card.getNumberOfUses();
             }
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         throw new OwnerNotRegisteredException();
     }
 
     @Override
     public ILoyaltyCardOwner getMostUsed() throws OwnerNotRegisteredException {
-        // TODO Auto-generated method stub
+
+        if (registeredOwners.size() < 1) {
+            throw new OwnerNotRegisteredException();
+        }
+
         int max = 0;
         ILoyaltyCardOwner mostUsed = null;
         for (ILoyaltyCard card: cards) {
             if (card.getNumberOfUses() > max) {
                 max = card.getNumberOfUses();
                 mostUsed = card.getOwner();
+            } else if (card.getNumberOfUses() == max) {
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return mostUsed;
     }
 

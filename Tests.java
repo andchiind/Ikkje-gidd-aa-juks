@@ -1,9 +1,14 @@
 package test;
 
 import common.InsufficientPointsException;
+import common.AbstractFactoryClient;
+import common.InsufficientPointsException;
+import common.OwnerAlreadyRegisteredException;
+import common.OwnerNotRegisteredException;
 
 import common.OwnerAlreadyRegisteredException;
 import impl.Factory;
+import impl.LoyaltyCardOwner;
 import interfaces.IFactory;
 import interfaces.ILoyaltyCard;
 import interfaces.ILoyaltyCardOperator;
@@ -74,7 +79,6 @@ public class Tests extends AbstractFactoryClient {
         loyaltyCard.addPoints(-1);
 
         assertEquals(0, loyaltyCard.getNumberOfPoints());
-
     }
 
     @Test
@@ -121,6 +125,212 @@ public class Tests extends AbstractFactoryClient {
             assertEquals(3, loyaltyCardOperator.getNumberOfCustomers());
 
         } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*@Test(expected=OwnerAlreadyRegisteredException.class)
+    public void registerAlreadyRegisteredOwner() {
+        loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+        assertEquals(1, loyaltyCardOperator.getNumberOfCustomers());
+
+        loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+    }*/
+
+    /*@Test(expected=OwnerNotRegisteredException.class)
+    public void unregisteredUnregisteredOwner() {
+
+        loyaltyCardOperator.unRegisterOwner(loyaltyCardOwner);
+    }*/
+
+    @Test
+    public void unregisterOneOwner() {
+        try {
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            assertEquals(1, loyaltyCardOperator.getNumberOfCustomers());
+
+            loyaltyCardOperator.unregisterOwner(loyaltyCardOwner);
+
+            assertEquals(0, loyaltyCardOperator.getNumberOfCustomers());
+
+        } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        } catch (OwnerNotRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void unregisterThreeOwners() {
+        try {
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            assertEquals(1, loyaltyCardOperator.getNumberOfCustomers());
+
+            ILoyaltyCardOwner owner1 = factory.makeLoyaltyCardOwner("owner1@owner.com", "owner1");
+
+            loyaltyCardOperator.registerOwner(owner1);
+
+            assertEquals(2, loyaltyCardOperator.getNumberOfCustomers());
+
+            ILoyaltyCardOwner owner2 = factory.makeLoyaltyCardOwner("owner2@owner.com", "owner2");
+
+            loyaltyCardOperator.registerOwner(owner2);
+
+            assertEquals(3, loyaltyCardOperator.getNumberOfCustomers());
+
+            loyaltyCardOperator.unregisterOwner(loyaltyCardOwner);
+
+            assertEquals(2, loyaltyCardOperator.getNumberOfCustomers());
+
+            loyaltyCardOperator.unregisterOwner(owner1);
+
+            assertEquals(1, loyaltyCardOperator.getNumberOfCustomers());
+
+            loyaltyCardOperator.unregisterOwner(owner2);
+
+            assertEquals(0, loyaltyCardOperator.getNumberOfCustomers());
+
+        } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        } catch (OwnerNotRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getOwnerPointsTest() {
+        try {
+
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            loyaltyCardOperator.processMoneyPurchase(loyaltyCardOwner.getEmail(), 1200);
+
+            assertEquals(12, loyaltyCardOperator.getNumberOfPoints(loyaltyCardOwner.getEmail()));
+
+        } catch (OwnerNotRegisteredException e) {
+            e.printStackTrace();
+        } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getOwnerPointsWithZeroPoints() {
+        try {
+
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            assertEquals(0, loyaltyCardOperator.getNumberOfPoints(loyaltyCardOwner.getEmail()));
+
+        } catch (OwnerNotRegisteredException e) {
+            e.printStackTrace();
+        } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getTotalPointsFromThreeOwners() {
+        try {
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            //assertEquals(1, loyaltyCardOperator.getNumberOfCustomers());
+
+            ILoyaltyCardOwner owner1 = factory.makeLoyaltyCardOwner("owner1@owner.com", "owner1");
+
+            loyaltyCardOperator.registerOwner(owner1);
+
+            //assertEquals(2, loyaltyCardOperator.getNumberOfCustomers());
+
+            ILoyaltyCardOwner owner2 = factory.makeLoyaltyCardOwner("owner2@owner.com", "owner2");
+
+            loyaltyCardOperator.registerOwner(owner2);
+
+            //assertEquals(3, loyaltyCardOperator.getNumberOfCustomers());
+
+            assertEquals(0, loyaltyCardOperator.getTotalNumberOfPoints());
+
+            loyaltyCardOperator.processMoneyPurchase(loyaltyCardOwner.getEmail(), 200);
+
+            assertEquals(2, loyaltyCardOperator.getTotalNumberOfPoints());
+
+            loyaltyCardOperator.processMoneyPurchase(owner1.getEmail(), 500);
+
+            assertEquals(7, loyaltyCardOperator.getTotalNumberOfPoints());
+
+            loyaltyCardOperator.processMoneyPurchase(owner1.getEmail(), 100);
+
+            assertEquals(8, loyaltyCardOperator.getTotalNumberOfPoints());
+
+        } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        } catch (OwnerNotRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getNumberOfCardUsesTest() {
+
+        try {
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            loyaltyCardOperator.processMoneyPurchase(loyaltyCardOwner.getEmail(), 200);
+            loyaltyCardOperator.processMoneyPurchase(loyaltyCardOwner.getEmail(), 200);
+            loyaltyCardOperator.processMoneyPurchase(loyaltyCardOwner.getEmail(), 200);
+
+            assertEquals(3, loyaltyCardOperator.getNumberOfUses(loyaltyCardOwner.getEmail()));
+
+        } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        } catch (OwnerNotRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getNumberOfCardUsesWithUnusedCard() {
+
+        try {
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            assertEquals(0, loyaltyCardOperator.getNumberOfUses(loyaltyCardOwner.getEmail()));
+
+        } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        } catch (OwnerNotRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getMostUsedCardOutOfThreeOwners() {
+
+        try {
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            ILoyaltyCardOwner owner1 = factory.makeLoyaltyCardOwner("owner1@owner.com", "owner1");
+
+            loyaltyCardOperator.registerOwner(owner1);
+
+            ILoyaltyCardOwner owner2 = factory.makeLoyaltyCardOwner("owner2@owner.com", "owner2");
+
+            loyaltyCardOperator.registerOwner(owner2);
+
+            loyaltyCardOperator.processMoneyPurchase(loyaltyCardOwner.getEmail(), 200);
+            loyaltyCardOperator.processMoneyPurchase(loyaltyCardOwner.getEmail(), 200);
+            loyaltyCardOperator.processMoneyPurchase(loyaltyCardOwner.getEmail(), 200);
+
+            loyaltyCardOperator.processMoneyPurchase(owner1.getEmail(), 100);
+
+            assertEquals(loyaltyCardOwner, loyaltyCardOperator.getMostUsed());
+
+        } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        } catch (OwnerNotRegisteredException e) {
             e.printStackTrace();
         }
     }
