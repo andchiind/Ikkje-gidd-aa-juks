@@ -6,7 +6,6 @@ import common.InsufficientPointsException;
 import common.OwnerAlreadyRegisteredException;
 import common.OwnerNotRegisteredException;
 
-import common.OwnerAlreadyRegisteredException;
 import impl.Factory;
 import impl.LoyaltyCardOwner;
 import interfaces.IFactory;
@@ -15,7 +14,6 @@ import interfaces.ILoyaltyCardOperator;
 
 //import org.junit.Test;
 
-import common.AbstractFactoryClient;
 import interfaces.ILoyaltyCardOwner;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,6 +99,37 @@ public class Tests extends AbstractFactoryClient {
         loyaltyCard.addPoints(2);
 
         assertEquals(3, loyaltyCard.getNumberOfUses());
+    }
+
+    @Test
+    public void loyaltyCardAddOnePoint() {
+        loyaltyCard.addPoints(1);
+
+        assertEquals(1, loyaltyCard.getNumberOfPoints());
+    }
+
+    @Test
+    public void loyaltyCardAddOneThousandPoint() {
+        loyaltyCard.addPoints(1000);
+
+        assertEquals(1000, loyaltyCard.getNumberOfPoints());
+    }
+
+    @Test
+    public void cardHasTooFewPoints() {
+
+        try {
+            loyaltyCard.addPoints(20);
+
+            assertEquals(20, loyaltyCard.getNumberOfPoints());
+
+            loyaltyCard.usePoints(10);
+
+            assertEquals(10, loyaltyCard.getNumberOfPoints());
+
+        } catch (InsufficientPointsException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -334,5 +363,14 @@ public class Tests extends AbstractFactoryClient {
             e.printStackTrace();
         }
     }
+
+    /*@Test(expected=InsufficientPointsException.class)
+    public void cardHasTooFewPoints() {
+
+        loyaltyCard.addPoints(10);
+
+        loyaltyCard.usePoints(20);
+
+    }*/
 
 }
