@@ -15,10 +15,14 @@ import interfaces.ILoyaltyCardOperator;
 //import org.junit.Test;
 
 import interfaces.ILoyaltyCardOwner;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * This is a JUnit test class for the loyalty card ADT.
@@ -32,7 +36,7 @@ public class Tests extends AbstractFactoryClient {
     private ILoyaltyCardOperator loyaltyCardOperator;
 
     //CLASS OR JUST BEFORE?????????/
-    /*@BeforeAll
+    /*@BeforeClass
     public static void setup() {
         factory = Factory.getInstance();
     }*/
@@ -53,13 +57,20 @@ public class Tests extends AbstractFactoryClient {
         assertNotNull(loyaltyCardOwner);
     }
 
-    /*@Test(expected=InsufficientPointsException.class)
+    /*@Test(expected = InsufficientPointsException.class)
     public void loyaltyCardInsufficientPointsException() {
         *//*ILoyaltyCardOwner loyaltyCardOwner = getFactory().makeLoyaltyCardOwner("name@name.com", "Name");
-        ILoyaltyCard loyaltyCard = getFactory().makeLoyaltyCard(loyaltyCardOwner);*//*
+        ILoyaltyCard loyaltyCard = getFactory().makeLoyaltyCard(loyaltyCardOwner);
+        *//*
 
         loyaltyCard.addPoints(1);
         loyaltyCard.usePoints(2);
+    }*/
+
+    /*@Test(expected = InsufficientPointsException.class)
+    public void loyaltyCardUseNegativePointsException() {
+
+        loyaltyCard.usePoints(-1);
     }*/
 
     @Test
@@ -75,6 +86,14 @@ public class Tests extends AbstractFactoryClient {
         ILoyaltyCard loyaltyCard = getFactory().makeLoyaltyCard(loyaltyCardOwner);*/
 
         loyaltyCard.addPoints(-1);
+
+        assertEquals(0, loyaltyCard.getNumberOfPoints());
+    }
+
+    @Test
+    public void loyaltyCardAddZeroPoints() {
+
+        loyaltyCard.addPoints(0);
 
         assertEquals(0, loyaltyCard.getNumberOfPoints());
     }
@@ -110,9 +129,9 @@ public class Tests extends AbstractFactoryClient {
 
     @Test
     public void loyaltyCardAddOneThousandPoint() {
-        loyaltyCard.addPoints(1000);
+        loyaltyCard.addPoints(Integer.MAX_VALUE);
 
-        assertEquals(1000, loyaltyCard.getNumberOfPoints());
+        assertEquals(Integer.MAX_VALUE, loyaltyCard.getNumberOfPoints());
     }
 
     @Test
@@ -167,10 +186,10 @@ public class Tests extends AbstractFactoryClient {
         loyaltyCardOperator.registerOwner(loyaltyCardOwner);
     }*/
 
-    /*@Test(expected=OwnerNotRegisteredException.class)
+    /*@Test(expected = OwnerNotRegisteredException.class)
     public void unregisteredUnregisteredOwner() {
 
-        loyaltyCardOperator.unRegisterOwner(loyaltyCardOwner);
+        loyaltyCardOperator.unregisterOwner(loyaltyCardOwner);
     }*/
 
     @Test
