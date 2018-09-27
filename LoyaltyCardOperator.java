@@ -64,6 +64,7 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
                         throw new InsufficientPointsException();
                     } else {
                         card.usePoints(pence);
+                        return;
                     }
 
                 }
