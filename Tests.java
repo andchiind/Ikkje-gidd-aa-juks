@@ -128,7 +128,7 @@ public class Tests extends AbstractFactoryClient {
     }
 
     @Test
-    public void loyaltyCardAddOneThousandPoint() {
+    public void loyaltyCardAddMaximumPoint() {
         loyaltyCard.addPoints(Integer.MAX_VALUE);
 
         assertEquals(Integer.MAX_VALUE, loyaltyCard.getNumberOfPoints());
@@ -177,14 +177,20 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
-    /*@Test(expected=OwnerAlreadyRegisteredException.class)
-    public void registerAlreadyRegisteredOwner() {
+    @Test/*(expected = OwnerAlreadyRegisteredException.class)*/
+    public void registerAlreadyRegisteredOwner() throws OwnerAlreadyRegisteredException {
         loyaltyCardOperator.registerOwner(loyaltyCardOwner);
 
         assertEquals(1, loyaltyCardOperator.getNumberOfCustomers());
 
-        loyaltyCardOperator.registerOwner(loyaltyCardOwner);
-    }*/
+        try {
+
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+            assertFalse(true);
+        } catch (OwnerAlreadyRegisteredException e) {
+            assertFalse(false);
+        }
+    }
 
     /*@Test(expected = OwnerNotRegisteredException.class)
     public void unregisteredUnregisteredOwner() {
