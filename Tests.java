@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class Tests extends AbstractFactoryClient {
 
-    //This factory is used to instantiate each object which is tested
+    //This factory is used to instantiate each object which is to be tested
     private IFactory factory = Factory.getInstance();
 
     private ILoyaltyCard loyaltyCard;
@@ -153,6 +153,10 @@ public class Tests extends AbstractFactoryClient {
         assertEquals(1, loyaltyCard.getNumberOfPoints());
     }
 
+    /**
+     * This checks that both the addPoints() and usePoints() methods in the LoyaltyCard class update the numberOfUses
+     * attribute. It also makes sure that the point that is added is also successfully removed.
+     */
     @Test
     public void loyaltyCardAddOnceUseOnce() {
 
@@ -170,6 +174,11 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * This test not only checks that a point can be successfully added and used, but also that you can continue to add points
+     * afterwards, and that each use updates the numberOfUses attribute.
+     */
     @Test
     public void loyaltyCardUseThrice() {
 
@@ -180,23 +189,33 @@ public class Tests extends AbstractFactoryClient {
             loyaltyCard.addPoints(2);
 
             assertEquals(3, loyaltyCard.getNumberOfUses());
+            assertEquals(2, loyaltyCard.getNumberOfPoints());
 
         } catch (InsufficientPointsException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * This ensures that we can add the maximum number of points.
+     */
     @Test
     public void loyaltyCardAddMaximumPoint() {
+
         loyaltyCard.addPoints(Integer.MAX_VALUE);
 
         assertEquals(Integer.MAX_VALUE, loyaltyCard.getNumberOfPoints());
     }
 
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * This tests that we can add and remove a random number of points.
+     */
     @Test
     public void cardUsePoints() {
 
         try {
+
             loyaltyCard.addPoints(20);
 
             assertEquals(20, loyaltyCard.getNumberOfPoints());
@@ -210,6 +229,10 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This checks that the number of points on a card does not change when we add zero points, and that not exception is
+     * thrown.
+     */
     @Test
     public void cardUseZeroPoints() {
 
@@ -226,6 +249,9 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This test checks that the getNumberOfCustomers() method returns the correct value when registering one owner.
+     */
     @Test
     public void registerOneOwner() {
 
@@ -240,6 +266,9 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This test checks that the getNumberOfCustomers() method returns the correct value when registering three owners.
+     */
     @Test
     public void registerThreeOwners() {
 
@@ -256,6 +285,10 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This makes sure that the OwnerAlreadyRegisteredException is thrown when trying to register an owner twice.
+     * @throws OwnerAlreadyRegisteredException when registering an already owned loyaltyCardOwner
+     */
     @Test (expected = OwnerAlreadyRegisteredException.class)
     public void registerAlreadyRegisteredOwner() throws OwnerAlreadyRegisteredException {
 
@@ -266,12 +299,20 @@ public class Tests extends AbstractFactoryClient {
         loyaltyCardOperator.registerOwner(loyaltyCardOwner);
     }
 
+    /**
+     * This makes sure that the OwnerNotRegisteredException is thrown when trying to unregister an owner that is not
+     * already registered.
+     * @throws OwnerNotRegisteredException when attempting to unregister an owner who has not been registered
+     */
     @Test (expected = OwnerNotRegisteredException.class)
-    public void unregisteredUnregisteredOwner() throws OwnerNotRegisteredException {
+    public void unregisteredNonRegisteredOwner() throws OwnerNotRegisteredException {
 
         loyaltyCardOperator.unregisterOwner(loyaltyCardOwner);
     }
 
+    /**
+     * This tests that the getNumberOfCustomers() method returns the correct value after adding and after removing an owner.
+     */
     @Test
     public void unregisterOneOwner() {
 
@@ -292,6 +333,9 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This tests that the getNumberOfCustomers() method returns the correct value after adding and after removing three owners.
+     */
     @Test
     public void unregisterThreeOwners() {
 
@@ -332,6 +376,11 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * This ensures that the getNumberOfPoints() method in the loyaltyCardOperator class returns the correct value for a
+     * random number of points.
+     */
     @Test
     public void getOwnerPoints() {
 
@@ -350,6 +399,10 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This ensures that the getNumberOfPoints() method in the loyaltyCardOperator class returns the correct value when
+     * the given owner has no points.
+     */
     @Test
     public void getOwnerPointsWithZeroPoints() {
 
@@ -366,6 +419,10 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This ensures that the getNumberOfPoints() method in the loyaltyCardOperator class returns the correct value when
+     * the given owner has the maximum number of points that can be added in a single transaction.
+     */
     @Test
     public void getOwnerPointsWithMaxPoints() {
 
@@ -384,6 +441,11 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * This test checks that the getTotalNumberOfPoints() method in the loyaltyCardOperator class works correctly when
+     * aggregating the total points of three owners with random points.
+     */
     @Test
     public void getTotalPointsFromThreeOwners() {
 
@@ -420,7 +482,11 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * This checks that the getNumberOfUses() method in the loyaltyCardOperator class returns the correct value after
+     * using the processMoneyPurchase() method three times.
+     */
     @Test
     public void getNumberOfCardUsesFromOperator() {
 
@@ -442,6 +508,11 @@ public class Tests extends AbstractFactoryClient {
     }
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    /**
+     * This tests that the getNumberOfUses() method in the loyaltyCardOperator class returns zero when a registered card
+     * has not bee used.
+     */
     @Test
     public void getNumberOfCardUsesWithUnusedCardFromOperator() {
 
@@ -458,6 +529,10 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This tests that the getTotalNumberOfPoints() method in the loyaltyCardOperator class returns zero when no cards
+     * have been used.
+     */
     @Test
     public void getTotalNumberOfPointsWithNoPointsFromOperator() {
 
@@ -472,6 +547,10 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This tests that the getTotalNumberOfPoints() method in the loyaltyCardOperator class returns the correct value
+     * when only one card has been registered and used.
+     */
     @Test
     public void getTotalNumberOfPointsFromOneUser() {
 
@@ -494,6 +573,9 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This tests the getMostUsed() method in the loyaltyCardOperator class when three owners have been registered.
+     */
     @Test
     public void getMostUsedCardOutOfThreeOwners() {
 
@@ -525,13 +607,22 @@ public class Tests extends AbstractFactoryClient {
     }
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * This ensures that the OwnerNotRegisteredException is thrown when using the getMostUsed() method in the
+     * loyaltyCardOperator class, when no owners have been registered.
+     * @throws OwnerNotRegisteredException
+     */
     @Test (expected = OwnerNotRegisteredException.class)
-    public void getMostUsedCardOutOfNoOwners()  throws OwnerNotRegisteredException{
+    public void getMostUsedCardOutOfNoOwners()  throws OwnerNotRegisteredException {
 
         assertNull(loyaltyCardOperator.getMostUsed());
 
     }
 
+    /**
+     * This tests that the processPointPurchase() method in the loyaltyCardOperator class correctly uses one point, which
+     * is checked with the getNumberOfPoints() method.
+     */
     @Test
     public void processPointPurchaseForOnePoint() {
 
@@ -556,6 +647,10 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This tests that the processPointPurchase() method in the loyaltyCardOperator class correctly uses the maximum number
+     * of points possible, which is checked with the getNumberOfPoints() method.
+     */
     @Test
     public void processPointPurchaseForMaximumPence() {
 
@@ -580,6 +675,9 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This ensures that a NullPointerException is thrown when creating a LoyaltyCardOwner with null attributes.
+     */
     @Test (expected = NullPointerException.class)
     public void createOwnerWithNullAttributes() {
 
@@ -587,6 +685,9 @@ public class Tests extends AbstractFactoryClient {
 
     }
 
+    /**
+     * This tests that a NullPointerException is thrown when attempting to register using a null value.
+     */
     @Test (expected = NullPointerException.class)
     public void registerNullOwner() {
 
@@ -599,6 +700,9 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This tests that a NullPointerException is thrown when attempting to unregister using a null value.
+     */
     @Test (expected = NullPointerException.class)
     public void unregisterNullOwner() {
 
@@ -611,6 +715,9 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This ensures that a NullPointerException is thrown when creating a LoyaltyCard with null attributes.
+     */
     @Test (expected = NullPointerException.class)
     public void createLoyaltyCardWithNullAttribute() {
 
@@ -618,6 +725,11 @@ public class Tests extends AbstractFactoryClient {
 
     }
 
+    /**
+     * This tests that an InsufficientPointsException is thrown when trying to make a purchase with more points than the card has
+     * with the processPointsPurchase() method in the LoyaltyCardOperator class.
+     * @throws InsufficientPointsException when trying to use more points than the card has
+     */
     @Test (expected = InsufficientPointsException.class)
     public void processPointPurchaseWithTooFewPoints() throws InsufficientPointsException {
 
@@ -634,8 +746,12 @@ public class Tests extends AbstractFactoryClient {
         }
     }
 
+    /**
+     * This tests that an InsufficientPointsException is thrown when trying to make use more points than a card has.
+     * @throws InsufficientPointsException when trying to use more points than the card has
+     */
     @Test(expected = InsufficientPointsException.class)
-    public void cardHasTooFewPoints() throws InsufficientPointsException{
+    public void cardHasTooFewPoints() throws InsufficientPointsException {
 
         loyaltyCard.addPoints(10);
 

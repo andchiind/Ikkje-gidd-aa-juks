@@ -69,7 +69,7 @@ public class LoyaltyCard implements ILoyaltyCard {
     /**
      * Use (deduct) a number of points from the loyalty card.
      * @param points the number of points to use (deduct) from this card
-     * @throws InsufficientPointsException
+     * @throws InsufficientPointsException when there are not enough points on the card
      */
     @Override
     public void usePoints(int points) throws InsufficientPointsException {
