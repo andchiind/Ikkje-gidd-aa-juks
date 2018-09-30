@@ -82,6 +82,7 @@ public class Tests extends AbstractFactoryClient {
      */
     @Test
     public void getNameOfOwner() {
+
         ILoyaltyCardOwner owner1 = factory.makeLoyaltyCardOwner("hello@email.com", "Name");
 
         assertEquals("Name", owner1.getName());
@@ -280,6 +281,39 @@ public class Tests extends AbstractFactoryClient {
 
             assertEquals(3, loyaltyCardOperator.getNumberOfCustomers());
 
+        } catch (OwnerAlreadyRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This tests that the LoyaltyCardOperator object successfully registers, unregisters and re-registers a loyaltyCardOwner
+     */
+    @Test
+    public void unregisterAndReRegisterOwner() {
+
+        try {
+
+            assertEquals(0, loyaltyCardOperator.getNumberOfCustomers());
+
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            assertEquals(1, loyaltyCardOperator.getNumberOfCustomers());
+
+            loyaltyCardOperator.unregisterOwner(loyaltyCardOwner);
+
+            assertEquals(0, loyaltyCardOperator.getNumberOfCustomers());
+
+            loyaltyCardOperator.registerOwner(loyaltyCardOwner);
+
+            assertEquals(1, loyaltyCardOperator.getNumberOfCustomers());
+
+            loyaltyCardOperator.unregisterOwner(loyaltyCardOwner);
+
+            assertEquals(0, loyaltyCardOperator.getNumberOfCustomers());
+
+        } catch (OwnerNotRegisteredException e) {
+            e.printStackTrace();
         } catch (OwnerAlreadyRegisteredException e) {
             e.printStackTrace();
         }
@@ -610,7 +644,7 @@ public class Tests extends AbstractFactoryClient {
     /**
      * This ensures that the OwnerNotRegisteredException is thrown when using the getMostUsed() method in the
      * loyaltyCardOperator class, when no owners have been registered.
-     * @throws OwnerNotRegisteredException
+     * @throws OwnerNotRegisteredException when no owner has been registered
      */
     @Test (expected = OwnerNotRegisteredException.class)
     public void getMostUsedCardOutOfNoOwners()  throws OwnerNotRegisteredException {
@@ -682,7 +716,6 @@ public class Tests extends AbstractFactoryClient {
     public void createOwnerWithNullAttributes() {
 
         ILoyaltyCardOwner owner1 = factory.makeLoyaltyCardOwner(null, null);
-
     }
 
     /**
@@ -722,7 +755,6 @@ public class Tests extends AbstractFactoryClient {
     public void createLoyaltyCardWithNullAttribute() {
 
         ILoyaltyCard card1 = factory.makeLoyaltyCard(null);
-
     }
 
     /**
@@ -756,7 +788,6 @@ public class Tests extends AbstractFactoryClient {
         loyaltyCard.addPoints(10);
 
         loyaltyCard.usePoints(20);
-
     }
 
 }

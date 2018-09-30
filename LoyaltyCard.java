@@ -60,6 +60,7 @@ public class LoyaltyCard implements ILoyaltyCard {
      */
     @Override
     public void addPoints(int points) {
+
         if (points > 0) {
             numberOfUses++;
             numberOfPoints += points;
@@ -73,9 +74,11 @@ public class LoyaltyCard implements ILoyaltyCard {
      */
     @Override
     public void usePoints(int points) throws InsufficientPointsException {
+
         if (points < 0) {
             return;
         }
+
         if (points > numberOfPoints) {
             throw new InsufficientPointsException();
         } else {
@@ -83,4 +86,5 @@ public class LoyaltyCard implements ILoyaltyCard {
             numberOfPoints -= points;
         }
     }
+
 }

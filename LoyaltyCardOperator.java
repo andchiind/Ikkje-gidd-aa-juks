@@ -89,7 +89,6 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
                         card.usePoints(pence);
                         return;
                     }
-
                 }
             }
             throw new OwnerNotRegisteredException();
@@ -116,6 +115,7 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
     public int getTotalNumberOfPoints() {
 
         int points = 0;
+
         for (ILoyaltyCard card: cards) {
             points += card.getNumberOfPoints();
         }
@@ -133,6 +133,7 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
     public int getNumberOfPoints(String ownerEmail) throws OwnerNotRegisteredException {
 
         for (ILoyaltyCard card: cards) {
+
             if (card.getOwner().getEmail().equals(ownerEmail)) {
                 return card.getNumberOfPoints();
             }
@@ -151,6 +152,7 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
     public int getNumberOfUses(String ownerEmail) throws OwnerNotRegisteredException {
 
         for (ILoyaltyCard card: cards) {
+
             if (card.getOwner().getEmail().equals(ownerEmail)) {
                 return card.getNumberOfUses();
             }
@@ -174,7 +176,9 @@ public class LoyaltyCardOperator extends AbstractFactoryClient implements ILoyal
 
         int max = 0;
         ILoyaltyCardOwner mostUsed = null;
+
         for (ILoyaltyCard card: cards) {
+
             if (card.getNumberOfUses() > max) {
                 max = card.getNumberOfUses();
                 mostUsed = card.getOwner();
